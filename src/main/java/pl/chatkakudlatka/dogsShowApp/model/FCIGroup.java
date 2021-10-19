@@ -1,16 +1,16 @@
 package pl.chatkakudlatka.dogsShowApp.model;
 
-public class FCIGroup {
-    public String fci_1;
-    public String fci_2;
-    public String fci_3;
-    public String fci_4;
-    public String fci_5;
-    public String fci_6;
-    public String fci_7;
-    public String fci_8;
-    public String fci_9;
-    public String fci_10;
-    public String fci_uncategorised;
+public enum FCIGroup {
+    FCI_1,
+    FCI_2,
+    FCI_3,
+    FCI_4,
+    FCI_5,
+    FCI_6,
+    FCI_7,
+    FCI_8,
+    FCI_9,
+    FCI_10,
+    FCI_UNCATEGORISED;
 
 }

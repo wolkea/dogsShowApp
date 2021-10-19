@@ -1,4 +1,4 @@
 package pl.chatkakudlatka.dogsShowApp.model;
 
-public enum Breed {
+public class Breed {
 }
