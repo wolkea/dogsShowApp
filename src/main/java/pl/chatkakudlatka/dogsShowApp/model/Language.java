@@ -1,6 +1,6 @@
 package pl.chatkakudlatka.dogsShowApp.model;
 
 public enum Language {
-    POLISH, ENGLISH
+    POLISH, ENGLISH, GERMAN
 }
 

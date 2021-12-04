@@ -1,4 +1,4 @@
-package pl.chatkakudlatka.dogsShowApp.model.auth;
+package pl.chatkakudlatka.dogsShowApp.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -9,12 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.chatkakudlatka.dogsShowApp.model.Kennel;
+import pl.chatkakudlatka.dogsShowApp.model.Language;
+import pl.chatkakudlatka.dogsShowApp.model.Owner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
@@ -30,13 +34,43 @@ public class UserController {
     @GetMapping("/register")
     public String showAddNewUser(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("languageList", Language.values());
+        model.addAttribute("kennelNamePositionList", Kennel.NamePossition.values());
         return "user/add";
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.save(user);
-        return "redirect:/";
+    public String saveUser(@ModelAttribute("user") User user, HttpServletRequest request, Model model) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+
+
+        boolean havedog = parameterMap.containsKey("havedog");
+        if (havedog){
+            String lastName = parameterMap.get("lastName")[0];
+            String firstName = parameterMap.get("firstName")[0];
+            Language language = Language.valueOf(parameterMap.get("language")[0]);
+
+            Owner owner = new Owner();
+            owner.setLastName(lastName);
+            owner.setFirstName(firstName);
+            owner.setLanguage(language);
+            user.setOwner(owner);
+
+            boolean havekennel = parameterMap.containsKey("havekennel");
+            if (havekennel){
+                String kennelName = parameterMap.get("kennelName")[0];
+                Kennel.NamePossition kennelNamePossition = Kennel.NamePossition.valueOf(parameterMap.get("kennelNamePosition")[0]);
+
+                Kennel kennel = new Kennel();
+                kennel.setKennelName(kennelName);
+                kennel.setKennelNamePossition(kennelNamePossition);
+                owner.setKennel(kennel);
+            }
+
+        }
+        User savedUser = userService.save(user);
+
+        return "user/add";
     }
 
     @GetMapping("/users")
@@ -64,7 +98,7 @@ public class UserController {
     public String getAllUserList(Model model) {
         List<User> allList = userService.getAllUserList();
         model.addAttribute("wtList",allList);
-        if (allList.size()==1) {
+        if (allList.size() == 1) {
             return "user/changePassword";
         } return "user/changeAdminPassword";
 

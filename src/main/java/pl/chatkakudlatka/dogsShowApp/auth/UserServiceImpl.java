@@ -1,4 +1,4 @@
-package pl.chatkakudlatka.dogsShowApp.model.auth;
+package pl.chatkakudlatka.dogsShowApp.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -32,7 +31,7 @@ public class UserServiceImpl implements UserDetailsService {
     @Override
     @Transactional()
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User  user  = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("Username is not in database");
         }
@@ -46,9 +45,15 @@ public class UserServiceImpl implements UserDetailsService {
                 user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 
-    public void save(User user) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+    public User save(User user) {
+        if (user.getId() == null) {
+            if (userRepository.findByUsername(user.getUsername()) != null)
+                return null;
+            if (userRepository.findByEmail(user.getEmail()) != null)
+                return null;
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     public Iterable getAllUsersNamesAndTheirRoles() {
@@ -78,7 +83,7 @@ public class UserServiceImpl implements UserDetailsService {
             User user = userRepository.findByUsername(username);
             user.setPassword(bCryptPasswordEncoder.encode(password));
             userRepository.save(user);
-        } else if(loggedInUser.getUsername().equals(username)) {
+        } else if (loggedInUser.getUsername().equals(username)) {
             loggedInUser.setPassword(bCryptPasswordEncoder.encode(password));
             userRepository.save(loggedInUser);
         }
@@ -90,9 +95,8 @@ public class UserServiceImpl implements UserDetailsService {
         }
         ArrayList<User> singleUser = new ArrayList<>();
         singleUser.add(getLoggedInUser());
-        return  singleUser;
+        return singleUser;
     }
-
 
 
 }

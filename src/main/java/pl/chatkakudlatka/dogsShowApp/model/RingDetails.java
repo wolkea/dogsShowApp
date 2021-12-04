@@ -9,7 +9,6 @@ public class RingDetails {
     private Integer ringId;
     private Date showDate;
     private String judge;
-    private Show_Rank showRank;
 
 
 

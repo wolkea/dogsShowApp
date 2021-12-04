@@ -1,4 +1,4 @@
-package pl.chatkakudlatka.dogsShowApp.model.auth;
+package pl.chatkakudlatka.dogsShowApp.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/templates/test/**", "/css/**", "/js/**", "/assets/**", "/templates/test/**", "/tmp/**", "/user/**").permitAll()
-                .antMatchers("/customer/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -47,4 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+
 }

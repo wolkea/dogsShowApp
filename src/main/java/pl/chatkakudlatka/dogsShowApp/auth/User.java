@@ -1,6 +1,8 @@
-package pl.chatkakudlatka.dogsShowApp.model.auth;
+package pl.chatkakudlatka.dogsShowApp.auth;
 
 import lombok.*;
+import pl.chatkakudlatka.dogsShowApp.model.Owner;
+import pl.chatkakudlatka.dogsShowApp.model.OwnerDetails;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,13 +22,15 @@ public class User {
     Integer id;
 
     String username;
-    String fullName;
     String email;
 
     String password;
 
     @ManyToMany
     private Set<Role> roles;
+
+    @OneToOne (cascade = CascadeType.ALL)
+    private Owner owner;
 
     public boolean isManager() {
         return roles.stream().anyMatch(roles -> roles.getName().equals("MANAGER"));

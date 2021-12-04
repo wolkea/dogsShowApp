@@ -1,23 +1,39 @@
 package pl.chatkakudlatka.dogsShowApp.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
+@Setter
+@Getter
+@Entity
+@Table(name = "dog")
 
 public class Dog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String callName;
     private String name;
-    private Kennel.NamePossition kennelNamePossition;
+
+    @ManyToOne (cascade = CascadeType.ALL)
     private Breed breed;
+
+    @Temporal(TemporalType.DATE)
     private Date birthDay;
-    private Sex sex;
+
+    @Enumerated(EnumType.STRING)
+    private DogSex sex;
     private boolean champion;
     private boolean working;
+
+    @ManyToOne (cascade = CascadeType.ALL)
     private Kennel kennel;
+
+    @ManyToMany(mappedBy = "dogs", cascade = CascadeType.ALL)
     private Set<Owner> owners;
 
 
-    private enum Sex {
-        BITCH, DOG;
-    }
 }

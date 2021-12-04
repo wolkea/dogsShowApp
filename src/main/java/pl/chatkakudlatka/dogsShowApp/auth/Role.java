@@ -1,11 +1,11 @@
-package pl.chatkakudlatka.dogsShowApp.model.auth;
+package pl.chatkakudlatka.dogsShowApp.auth;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Builder
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
